@@ -15,6 +15,7 @@ const getAllProducts = async (req, res) => {
 
 // add new product
 
+
 const createProduct = async (req, res) => {
   try {
     const { name, description, price, media, inStock, status } = req.body;
