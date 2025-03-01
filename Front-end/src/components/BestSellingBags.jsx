@@ -1,7 +1,12 @@
-import { Card } from "@/components/ui/card";
-import React from "react";
+import {Card}  from "../components/ui/Card";
+import React, { useEffect } from "react";
 
 function BestSellingBags() {
+  console.log('🧩 BestSellingBags component rendering');
+  useEffect(() => {
+    console.log('🔄 BestSellingBags component mounted');
+    return () => console.log('🔄 BestSellingBags component unmounted');
+  }, []);
   const emptyBoxes = Array(4).fill(null);
   return (
     <section className="py-16 bg-white">

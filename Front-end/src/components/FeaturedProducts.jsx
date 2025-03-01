@@ -1,5 +1,5 @@
-import React from 'react';
-import {Card} from "@/components/ui/card"
+import React, { useEffect } from 'react';
+import {Card} from "./ui/Card"
 
 const products = [
     {
@@ -39,6 +39,12 @@ const products = [
 ]
 
 function FeaturedProducts(props) {
+    console.log('🧩 FeaturedProducts component rendering');
+
+    useEffect(() => {
+        console.log('🔄 FeaturedProducts component mounted');
+        return () => console.log('🔄 FeaturedProducts component unmounted');
+      }, []);
     return (
         <section className='py-20 bg-white'>
             <div className='container max-w-7x1 mx-auto px-4'>

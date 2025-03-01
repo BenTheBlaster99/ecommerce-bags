@@ -1,8 +1,14 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import {ShoppingBag} from 'lucide-react';
-import {Button} from '@/components/ui/button'
+import {Button} from './ui/Button'
 
 function Hero(props) {
+    console.log('🧩 Hero component rendering');
+
+    useEffect(() => {
+        console.log('🔄 Hero component mounted');
+        return () => console.log('🔄 Hero component unmounted');
+      }, []);
     return (
         
         <section className='relative h-screen flex items-center justify-center overflow-hidden bg-cream'>

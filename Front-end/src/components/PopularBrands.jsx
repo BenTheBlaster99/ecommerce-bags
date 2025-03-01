@@ -1,4 +1,5 @@
-import {Card} from "@/components/ui/card";
+import { useEffect } from "react";
+import {Card} from "./ui/Card";
 const brands = [
     { id: 1, name: "DIOR" , logo:""},
     { id: 2, name: "Louis Vuitton" , logo:""},
@@ -16,6 +17,11 @@ const brands = [
 
 
 function PopularBrands(props) {
+    console.log('🧩 PopularBrands component rendering');
+    useEffect(() => {
+        console.log('🔄 PopularBrands component mounted');
+        return () => console.log('🔄 PopularBrands component unmounted');
+      }, []);
     return (
        <section className="py-16 bg-white">
         <div className="container max-w-7xl mx-auto px-4">

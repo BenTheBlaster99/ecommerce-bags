@@ -1,5 +1,5 @@
 import React from "react";
-import { Button } from "@/components/ui/button";
+import  Button  from "../ui/Button";
 import { HelpCircle } from "lucide-react";
 
 function TopBar(props) {

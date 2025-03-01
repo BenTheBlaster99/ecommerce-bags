@@ -1,8 +1,8 @@
 import React from "react";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
+import  Button  from "../ui/Button";
+import  Input from "../ui/Input";
+
 import { Heart, ShoppingCart, User, Sun, Moon, Search } from "lucide-react";
-import { useTheme } from "@/contexts/ThemeContext";
 
 function MainHeader(props) {
   const { theme, toggleTheme } = useTheme();
