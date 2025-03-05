@@ -1,30 +1,37 @@
-import React from 'react';
-import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { BrowserRouter, Routes, Route } from "react-router-dom";
-import { ThemeProvider } from "./contexts/ThemeContext";
-import Header from "./components/Header/Header";
-import Index from "./pages/Index";
-import { Toaster } from "./components/ui/Toaster";
+import Header from "./components/Header";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import Home from "./pages/Home";
+import Products from "./pages/Products";
+import Footer from "./components/Footer";
+import Productdetails from "./pages/Productdetails";
+import Checkout from "./pages/Checkout";
+import Confirmation from "./pages/Confirmation"
+import { CartProvider } from "./context/CartContext"; 
+import "./App.css";
 
-console.log('app.jsx is being executed');
-
-const queryClient = new QueryClient();
 
 function App() {
-  console.log('app componet rendeing');
-  
   return (
-    <QueryClientProvider client={queryClient}>
-      <ThemeProvider>
-        <Toaster />
-        <BrowserRouter>
+    <>
+    <CartProvider>
+      <Router>
+        <div className="min-h-screen bg-white">
           <Header />
+          {/*main content */}
+          <main className="flex-grow">
           <Routes>
-            <Route path="/" element={<Index />} />
+            <Route path="/" element={<Home />} />
+            <Route path="/products" element={<Products />} />
+            <Route path="/products/:id" element={<Productdetails/>}/> {/** add route for product */}
+            <Route path="/checkout" element={<Checkout/>}/>
+            <Route path="/confirmation" element={<Confirmation/>}/>
           </Routes>
-        </BrowserRouter>
-      </ThemeProvider>
-    </QueryClientProvider>
+          </main>
+          <Footer/>
+        </div>
+      </Router>
+      </CartProvider>
+    </>
   );
 }
 
