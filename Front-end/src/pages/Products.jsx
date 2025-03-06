@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useState } from "react";
-import { useSearchParams } from "react-router-dom";
+import { useLocation, useSearchParams } from "react-router-dom";
 import { CartContext } from "../context/CartContext";
 import axios from "axios";
 
@@ -14,27 +14,44 @@ function Products() {
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const location = useLocation();
 
   const { addToCart } = useContext(CartContext);
 
-  useEffect(()=> {
-    const fetchProduct = async () =>{
-      try {
-        const response = await axios.get("http://localhost:5000/products")
-        setProducts(response.data)
-        setLoading(false)
-      } catch (err){
-        setError(err.message);
-        setLoading(false)
-      }
+  useEffect(() => {
+    // parse the query paramertre from url
+    const queryParams = new URLSearchParams(location.search);
+    const filterParam = queryParams.get("filter") || "all";
+
+    if (filterParam !== filter) {
+
+      setFilter(filterParam);
     }
-    fetchProduct()
-  }, [])
-   
-    
 
-  
+    //fetching products based on the filter
+    const fetchProduct = async () => {
+      try {
+        const response = await axios.get(`/products`);
+        console.log("filteredProducts:,", filteredProducts);
 
+        setProducts(response.data);
+        console.log(`fetched products:`, response.data);
+
+        setLoading(false);
+      } catch (err) {
+        setError(err.message);
+        console.error("error fetching products:", error);
+
+        setLoading(false);
+      }
+    };
+    fetchProduct();
+  }, [location.search,filter]); //re-run when the url change
+
+  const navigateToProducts = (filter) => {
+    console.log("navigating to products with filter:", filter);
+    navigate(`/products?filter=${filter}`);
+  };
 
   // Update filter based on URL
   useEffect(() => {
@@ -50,12 +67,15 @@ function Products() {
 
   // Filter products based on the selected filter
   const filteredProducts =
-    filter === "all"
+    !products || !Array.isArray(products)
+      ? []
+      : filter === "all"
       ? products
       : products.filter((product) => {
           const matchesSearch = product.name
             .toLowerCase()
             .includes(searchQuery.toLowerCase());
+          console.log("filteredProducts:", filteredProducts);
           switch (activeFilter) {
             case "color":
               return product.color === filter;
@@ -69,6 +89,10 @@ function Products() {
               return true;
           }
         });
+
+  if (filteredProducts.length === 0) {
+    return <div>No Products Found</div>;
+  }
 
   const toggleFilterMenu = (filterType) => {
     setActiveFilter(activeFilter === filterType ? null : filterType);
@@ -249,9 +273,15 @@ function Products() {
 
               {/* Product Details */}
               <div className="p-4">
-                <h3 className="text-lg font-semibold">{product.name}</h3>
-                <p className="text-gray-600">{product.brand}</p>
-                <p className="text-xl font-semibold">{product.price}</p>
+                <h3>Products</h3>
+                <p>Filter: {filter}</p>
+                {products.map((product) => (
+                  <div key={product.id}>
+                    <h3 className="text-lg font-semibold">{product.name}</h3>
+                    <p className="text-gray-600">{product.brand}</p>
+                    <p className="text-xl font-semibold">{product.price}</p>
+                  </div>
+                ))}
               </div>
             </div>
           ))}

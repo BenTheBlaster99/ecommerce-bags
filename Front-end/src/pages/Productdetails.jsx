@@ -61,9 +61,7 @@ function Productdetails() {
     const fetchProduct = async () => {
       //simulate fetching data
       try {
-        const response = await axios.get(
-          `http://localhost:5000/products/${id}`
-        );
+        const response = await axios.get(`/products/${id}`);
         setProduct(response.data);
         setLoading(false);
       } catch (err) {
