@@ -1,5 +1,7 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { useSearchParams } from "react-router-dom";
+import { CartContext } from "../context/CartContext";
+import axios from "axios";
 
 function Products() {
   const [searchParams] = useSearchParams(); // Getting URL query parameters
@@ -9,48 +11,30 @@ function Products() {
   const [selectedSize, setSelectedSize] = useState(null); // State for selected size
   const [selectedBrand, setSelectedBrand] = useState(null); // State for selected brand
   const [selectedPromo, setSelectedPromo] = useState(null); // State for selected promo
-  const [searchQuery, setSearchQuery] = useState("");
+  const [products, setProducts] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
 
-  const products = [
-    {
-      id: 1,
-      name: "Hermes Kelly",
-      brand: "HERMES",
-      price: "11950 DZD",
-      image: "https://via.placeholder.com/400x400",
-      color: "Pink",
-      size: "Small",
-      promo: true,
-    },
-    {
-      id: 2,
-      name: "Chanel Flap Bag",
-      brand: "CHANEL",
-      price: "9950 DZD",
-      image: "https://via.placeholder.com/400x400",
-      color: "Black",
-      size: "Medium",
-      promo: false,
-    },
-    {
-      id: 3,
-      name: "Dior Saddle",
-      brand: "DIOR",
-      price: "8950 DZD",
-      image: "https://via.placeholder.com/400x400",
-      color: "Blue",
-      size: "Large",
-      promo: true,
-    },
-  ];
+  const { addToCart } = useContext(CartContext);
 
-  // Filter options
-  const filterOptions = {
-    color: ["Pink", "Black", "Blue", "Red"],
-    size: ["Small", "Medium", "Large"],
-    brand: ["HERMES", "CHANEL", "DIOR"],
-    promo: ["On Sale", "Regular"],
-  };
+  useEffect(()=> {
+    const fetchProduct = async () =>{
+      try {
+        const response = await axios.get("http://localhost:5000/products")
+        setProducts(response.data)
+        setLoading(false)
+      } catch (err){
+        setError(err.message);
+        setLoading(false)
+      }
+    }
+    fetchProduct()
+  }, [])
+   
+    
+
+  
+
 
   // Update filter based on URL
   useEffect(() => {

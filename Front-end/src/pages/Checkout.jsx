@@ -4,7 +4,7 @@ import { CartContext } from "../context/CartContext";
 
 function Checkout() {
 
-  const {cart, removeFromCart, updateQuantity} =useContext(CartContext)
+  const {cart, removeFromCart, updateQuantity, getCartTotal} =useContext(CartContext)
 
   const navigate = useNavigate();
   // State for form data

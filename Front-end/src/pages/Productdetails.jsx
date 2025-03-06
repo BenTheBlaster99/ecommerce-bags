@@ -1,13 +1,15 @@
 import React, { useContext, useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { CartContext } from "../context/CartContext";
+import axios from "axios";
 
 function Productdetails() {
   const { id } = useParams(); //getting the product id from url
   const [product, setProduct] = useState(null);
   const [activeTab, setActiveTab] = useState("details"); // state to manage active tab
-
   const { addToCart } = useContext(CartContext); // get addtocart function from context
+  const [error, setError] = useState(null);
+  const [loading, setLoading] = useState(true);
 
   const products = [
     {
@@ -42,8 +44,6 @@ function Productdetails() {
     },
   ];
 
-
-
   const handleAddCart = () => {
     if (product) {
       addToCart({
@@ -60,40 +60,23 @@ function Productdetails() {
   useEffect(() => {
     const fetchProduct = async () => {
       //simulate fetching data
-      const fakeProduct = {
-        id: id,
-        name: "Hermes Kelly",
-        brand: "Hermes",
-        price: "11950 DZD",
-        discount: "204 OFF",
-        finalPrice: "10450 DZD",
-        shippingInfo: "This price doesn't include shipping cost",
-        images: [
-          "/images/bag1.jpg",
-          "/images/bag2.jpg",
-          "/images/bag3.jpg",
-          "/images/bag4.jpg",
-        ],
-        colors: [
-          "/images/color1.jpg",
-          "/images/color2.jpg",
-          "/images/color3.jpg",
-        ],
-        details: {
-          dimensions: "20 cm x 15 cm x 8 cm",
-          weight: "0.66 Kg",
-          material: "Togo Leather",
-          accessories: "Original Box",
-        },
-      };
-      setProduct(fakeProduct);
+      try {
+        const response = await axios.get(
+          `http://localhost:5000/products/${id}`
+        );
+        setProduct(response.data);
+        setLoading(false);
+      } catch (err) {
+        setError(err.message);
+        setLoading(false);
+      }
     };
     fetchProduct();
   }, [id]);
-  if (!product) {
-    return <div>Loading...</div>; // show a loading state while fetching data
-  }
 
+  if (loading) return <div>Loading...</div>;
+  if (error) return <div>Error :{error}</div>;
+  if (!product) return <div>Product not found</div>;
   const similarBags = products
     .filter((p) => p.id !== parseInt(id)) // exclude the current product
     .sort(() => Math.random() - 0.5) // shuffeling the array
