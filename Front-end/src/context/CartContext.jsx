@@ -11,10 +11,12 @@ export const CartProvider = ({ children }) => {
   //load cart from localstorage on initian render
   useEffect(() => {
     const savedCart = localStorage.getItem("cart");
+    console.log('hello');
+    
     if (savedCart) {
       setCart(JSON.parse(savedCart));
     }
-  });
+  }, []);
   useEffect(() => {
     localStorage.setItem("cart", JSON.stringify(cart));
   }, [cart]);

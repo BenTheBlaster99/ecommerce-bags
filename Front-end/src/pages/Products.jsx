@@ -1,6 +1,7 @@
 import React, { useContext, useEffect, useState } from "react";
 import { useLocation, useSearchParams } from "react-router-dom";
 import { CartContext } from "../context/CartContext";
+import baseURL from "../api/axios"
 import axios from "axios";
 
 function Products() {
@@ -31,7 +32,7 @@ function Products() {
     //fetching products based on the filter
     const fetchProduct = async () => {
       try {
-        const response = await axios.get(`/products`);
+        const response = await axios.get(`${baseURL}/products`);
         console.log("filteredProducts:,", filteredProducts);
 
         setProducts(response.data);

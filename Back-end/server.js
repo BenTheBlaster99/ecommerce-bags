@@ -5,6 +5,7 @@ require('dotenv').config();
 const userRoutes = require("./routes/userRoutes");
 const productRoutes = require("./routes/productRoutes");
 const { errorHandler } = require("./middleware/errorMiddleware");
+const path = require('path')
 
 const app = express();
 
@@ -17,7 +18,15 @@ app.use(express.json());
 app.use("/api/users", userRoutes);
 app.use("/api/products", productRoutes);
 
+// server static files (frontend)
+
+app.use(express.static(path.join(__dirname,'../Front-end/dist')))
+
+app.get('*',(req,res)=>{
+  res.sendFile(path.join(__dirname,'../Front-end/dist', 'index.html'))
+})
 //mongoDB connection
+
 
 mongoose
   .connect(process.env.MONGODB_URI)

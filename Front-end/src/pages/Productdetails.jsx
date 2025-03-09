@@ -11,39 +11,6 @@ function Productdetails() {
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(true);
 
-  const products = [
-    {
-      id: 1,
-      name: "Hermes Kelly",
-      brand: "Hermes",
-      price: "11950 DZD",
-      image: "https://via.placeholder.com/600x600",
-      color: "Pink",
-      size: "Small",
-      promo: true,
-    },
-    {
-      id: 2,
-      name: "Chanel Flap Bag",
-      brand: "Chanel",
-      price: "9950 DZD",
-      image: "https://via.placeholder.com/600x600",
-      color: "Black",
-      size: "Medium",
-      promo: false,
-    },
-    {
-      id: 3,
-      name: "Dior Saddle",
-      brand: "Dior",
-      price: "8950 DZD",
-      image: "https://via.placeholder.com/600x600",
-      color: "Blue",
-      size: "Large",
-      promo: true,
-    },
-  ];
-
   const handleAddCart = () => {
     if (product) {
       addToCart({
