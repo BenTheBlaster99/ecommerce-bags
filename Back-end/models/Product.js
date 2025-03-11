@@ -21,7 +21,7 @@ const productSchema = new mongoose.Schema({
     {
       type: {
         type: String,
-        enum: ["image", "video"],
+        default: [],
         required: true,
       },
       url: {

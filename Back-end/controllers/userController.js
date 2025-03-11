@@ -91,13 +91,16 @@ const loginUser = async (req, res) => {
   try {
     const { email, password } = req.body;
     const user = await User.findOne({
-      email,
+      email
     });
     if (user && (await bcrypt.compare(password, user.password))) {
       console.log(
         `Controller: ${user.role === "admin" ? "Admin" : "User"} logged in:`,
         user._id
       );
+      const token = generateToken(user._id)
+      console.log("generated token:", token);
+      
       res.json({
         _id: user._id,
         name: user.name,

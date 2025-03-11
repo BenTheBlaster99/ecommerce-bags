@@ -1,6 +1,5 @@
 const Product = require("../models/Product");
 
-
 //get all products
 
 const getAllProducts = async (req, res) => {
@@ -15,10 +14,21 @@ const getAllProducts = async (req, res) => {
 
 // add new product
 
-
 const createProduct = async (req, res) => {
   try {
-    const { name, description, price, media, inStock, status } = req.body;
+    const { name, description, price, inStock, status } = req.body;
+
+    if (!name || !description || !price || !status) {
+      return res.status(400).json({ message: "Missing required fields" });
+    }
+    const media = req.file.map((file, index)=>({
+      type: file.mimetype.startsWith("image")?"image": "video",
+      url: file.path,
+      alt: `Product image ${index + 1}`,
+      title: `Product image ${index+1}`,
+      order:index,
+      isThumbnail: index === 0,
+    }))
     const product = new Product({
       name,
       description,
@@ -38,14 +48,14 @@ const createProduct = async (req, res) => {
 //delete product
 const deleteProduct = async (req, res) => {
   try {
-    const product = await Product.findById(req.params.id);
+    const product = await Product.findByIdAndDelete(req.params.id);
     if (!product) {
       console.log("Product not found:", req.params.id);
       return res.status(404).json({
         message: "Product not found",
       });
     }
-    await Product.deleteOne({ _id: req.params.id });
+
     console.log("Product deleted successfully:", req.params.id);
     res.json({ message: "Product removed successfully" });
   } catch (error) {
@@ -57,16 +67,26 @@ const deleteProduct = async (req, res) => {
 //update product
 const updateProduct = async (req, res) => {
   try {
+    const newMedia = req.files.map((file, index)=>({
+      type: file.mimetype.startsWith("image")? "image":"video",
+      url: file.path,
+      alt: `Product image ${index +1}`,
+      title: `Product image ${index+1}`,
+      order:index,
+      isThumbnail: index === 0,
+    }))
     const product = await Product.findById(req.params.id);
     if (!product) {
       console.log("Product not found:", req.params.id);
       return res.status(404).json({ message: "Product not found" });
     }
+    const updatedMedia = [...product.media, ...newMedia]
+   
     const updates = {
       name: req.body.name || product.name,
       description: req.body.description || product.description,
       price: req.body.price || product.price,
-      media: req.body.media || product.media,
+      media: updatedMedia,
       status: req.body.status || product.status,
       inStock:
         req.body.inStock !== undefined ? req.body.inStock : product.inStock,

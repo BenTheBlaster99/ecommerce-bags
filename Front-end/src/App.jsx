@@ -8,6 +8,9 @@ import Checkout from "./pages/Checkout";
 import Confirmation from "./pages/Confirmation"
 import { CartProvider } from "./context/CartContext"; 
 import "./App.css";
+import AdminLogin from "./pages/AdminLogin";
+import AdminDashboard from "./pages/AdminDashboard";
+import CreateProduct from "./pages/CreateProduct";
 
 
 function App() {
@@ -25,6 +28,9 @@ function App() {
             <Route path="/products/:id" element={<Productdetails/>}/> {/** add route for product */}
             <Route path="/checkout" element={<Checkout/>}/>
             <Route path="/confirmation" element={<Confirmation/>}/>
+            <Route path="/admin/login" element={<AdminLogin/>}/>
+            <Route path="/admin/dashboard" element={<AdminDashboard/>}/>
+            <Route path="/admin/create-product" element={<CreateProduct/>}/>
           </Routes>
           </main>
           <Footer/>

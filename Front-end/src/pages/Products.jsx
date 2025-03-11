@@ -1,7 +1,7 @@
 import React, { useContext, useEffect, useState } from "react";
 import { useLocation, useSearchParams } from "react-router-dom";
 import { CartContext } from "../context/CartContext";
-import baseURL from "../api/axios"
+import baseURL from "../api/axios";
 import axios from "axios";
 
 function Products() {
@@ -23,20 +23,14 @@ function Products() {
     // parse the query paramertre from url
     const queryParams = new URLSearchParams(location.search);
     const filterParam = queryParams.get("filter") || "all";
-
-    if (filterParam !== filter) {
-
-      setFilter(filterParam);
-    }
-
+    setFilter(filterParam);
     //fetching products based on the filter
     const fetchProduct = async () => {
       try {
         const response = await axios.get(`${baseURL}/products`);
-        console.log("filteredProducts:,", filteredProducts);
 
-        setProducts(response.data);
         console.log(`fetched products:`, response.data);
+        setProducts(response.data);
 
         setLoading(false);
       } catch (err) {
@@ -47,7 +41,7 @@ function Products() {
       }
     };
     fetchProduct();
-  }, [location.search,filter]); //re-run when the url change
+  }, [location.search]); //re-run when the url change
 
   const navigateToProducts = (filter) => {
     console.log("navigating to products with filter:", filter);
@@ -76,7 +70,7 @@ function Products() {
           const matchesSearch = product.name
             .toLowerCase()
             .includes(searchQuery.toLowerCase());
-          console.log("filteredProducts:", filteredProducts);
+         
           switch (activeFilter) {
             case "color":
               return product.color === filter;
@@ -90,6 +84,13 @@ function Products() {
               return true;
           }
         });
+  console.log("filtered products:", filteredProducts);
+  if(loading){
+    return <div>Loading ...</div>
+  }
+  if (error){
+    return <div>Error :{error}</div>
+  }
 
   if (filteredProducts.length === 0) {
     return <div>No Products Found</div>;
@@ -276,7 +277,7 @@ function Products() {
               <div className="p-4">
                 <h3>Products</h3>
                 <p>Filter: {filter}</p>
-                {products.map((product) => (
+                {filteredProducts.map((product) => (
                   <div key={product.id}>
                     <h3 className="text-lg font-semibold">{product.name}</h3>
                     <p className="text-gray-600">{product.brand}</p>
