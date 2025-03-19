@@ -11,7 +11,7 @@ function AdminLogin() {
   const handleLogin = async () => {
     setIsLoading(true);
     try {
-      const response = await axios("/api/users/login", { email, password });
+      const response = await axios.post("/api/users/login", { email, password });
       console.log("loging response:",response.data);
       
       if (response.data.role === "admin") {

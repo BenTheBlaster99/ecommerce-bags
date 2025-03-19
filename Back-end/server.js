@@ -15,12 +15,15 @@ app.use(cors());
 app.use(express.json());
 
 //routes
-app.use("/api/users", userRoutes);
 app.use("/api/products", productRoutes);
+app.use("/api/users", userRoutes);
 
 // server static files (frontend)
 
-app.use(express.static(path.join(__dirname,'../Front-end/dist')))
+if ( process.env.NODE_ENV === "production"){
+
+  app.use(express.static(path.join(__dirname,'../Front-end/dist')))
+}
 
 app.get('*',(req,res)=>{
   res.sendFile(path.join(__dirname,'../Front-end/dist', 'index.html'))
